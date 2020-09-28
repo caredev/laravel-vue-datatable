@@ -37,20 +37,12 @@
                     border-top: 5px solid #ccc;
                     border-left: 5px solid transparent;
                     border-right: 5px solid transparent;"
-        :class="{
-          'active-filter-desc':
-            column.orderable && column.name == currentSort && dir == 'desc'
-        }"
-        :style="{
-          borderTop:
-            column.orderable && column.name == currentSort && dir == 'desc'
-              ? '5px solid #a3a3a3'
-              : '5px solid #ccc'
-        }"
-      ></div>
-    </div>
-    <span v-html="column.label"></span>
-  </th>
+                :class="{'active-filter-desc': column.orderable && column.name == currentSort && dir == 'desc' }"
+                :style="{borderTop: column.orderable && column.name == currentSort && dir == 'desc' ? '5px solid #a3a3a3' : '5px solid #ccc' }">
+            </div>
+        </div>
+        <span v-html="`&nbsp;${column.label}`"></span>
+    </th>
 </template>
 
 <script>
@@ -94,6 +86,9 @@ export default {
       this.currentSort = column.name;
       this.$emit("sort", column);
     }
+  },
+  setCurrentColumnSort(columnName) {
+      this.currentSort = columnName;
   }
 };
 </script>

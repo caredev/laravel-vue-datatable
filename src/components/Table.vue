@@ -1,27 +1,27 @@
 <template>
-  <div :class="tableContainerClasses">
-    <table :class="tableClasses" class="laravel-vue-datatable">
-      <slot name="header" v-if="headerSlot"> </slot>
-      <thead
-        v-else
-        :class="tableHeaderClasses"
-        class="laravel-vue-datatable-thead"
-      >
-        <tr :class="tableRowClasses" class="laravel-vue-datatable-thead-tr">
-          <laravel-vue-data-table-th
-            :dir="dir"
-            @sort="sort"
-            :column="column"
-            :key="column.name"
-            v-for="column in columns"
-            :classes="tableHeadClasses"
-          >
-          </laravel-vue-data-table-th>
-        </tr>
-      </thead>
-      <slot name="body"> </slot>
-    </table>
-  </div>
+    <div :class="tableContainerClasses">
+        <table :class="tableClasses" class="laravel-vue-datatable">
+            <slot
+                name="header">
+                <thead
+                    :class="tableHeaderClasses"
+                    class="laravel-vue-datatable-thead">
+                    <tr :class="tableRowClasses" class="laravel-vue-datatable-thead-tr">
+                        <laravel-vue-data-table-th
+                            :dir="dir"
+                            @sort="sort"
+                            :column="column"
+                            :key="column.name"
+                            v-for="column in columns"
+                            :classes="tableHeadClasses">
+                        </laravel-vue-data-table-th>
+                    </tr>
+                </thead>
+            </slot>
+            <slot name="body">
+            </slot>
+        </table>
+    </div>
 </template>
 
 <script>
@@ -81,13 +81,5 @@ export default {
       this.$emit("sort", column.name, column.columnName);
     }
   },
-  computed: {
-    headerSlot() {
-      if (this.$scopedSlots) {
-        return this.$scopedSlots.header;
-      }
-      return null;
-    }
-  }
 };
 </script>

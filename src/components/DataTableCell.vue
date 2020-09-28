@@ -9,6 +9,15 @@ export default {
         column: {
             type: Number,
         },
+        transform: {
+
+        },
+        comp: {
+
+        },
+        column: {
+            type: Number,
+        },
         transform: {},
         comp: {},
         meta: {
@@ -40,25 +49,20 @@ export default {
         return {}
     },
     render(createElement) {
-        let transformedValue
+        let transformedValue;
 
-        if (typeof this.transform === "function") {
-            transformedValue = this.transform({
-                row: this.row,
-                column: this.column,
-                name: this.name,
-                data: this.value,
-                meta: this.meta,
-            })
+        if (typeof this.transform === 'function') {
+           transformedValue = this.transform({ row: this.row, column: this.column, name: this.name, data: this.value, meta: this.meta });
         }
-
+        
         if (this.comp) {
+
             let props = {
                 name: this.name,
                 data: this.value,
                 meta: this.meta,
                 transformed: transformedValue,
-            }
+            };
 
             props[this.event] = this.handler
 
@@ -78,6 +82,10 @@ export default {
                 },
             })
         }
+        
+        if (typeof this.transform === 'function') {
+            return createElement('span', {domProps:{innerHTML: transformedValue}})
+        }
 
         let columnName
         let handle = this.name.split(".")
@@ -96,13 +104,8 @@ export default {
                 `The column ${this.name} was not found`
             )
         }
-
-        return createElement("span", {
-            domProps: { innerHTML: columnName },
-            attrs: {
-                classes: this.classes,
-            },
-        })
-    },
+        
+        return createElement('span', {domProps:{innerHTML: columnName}});
+    }
 }
 </script>

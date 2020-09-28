@@ -1,100 +1,100 @@
 <template>
-  <div>
-    <!-- Top Filters -->
-    <slot
-      :url="url"
-      name="filters"
-      v-if="filtersSlot"
-      :per-page="perPage"
-      :table-data="tableProps"
-    >
-    </slot>
-    <laravel-vue-data-table-filters
-      v-else
-      :per-page="perPage"
-      :table-data="tableProps"
-      :placeholder-search="translate.placeholderSearch"
-    >
-    </laravel-vue-data-table-filters>
-    <!-- Table component -->
-    <laravel-vue-table
-      @sort="sortBy"
-      :sortKey="sortKey"
-      :columns="columns"
-      :dir="tableProps.dir"
-      :sortOrders="sortOrders"
-      :table-classes="computedClasses.table"
-      :table-head-classes="computedClasses['th']"
-      :table-header-classes="computedClasses['t-head']"
-      :table-row-classes="computedClasses['t-head-tr']"
-      :table-container-classes="computedClasses['table-container']"
-    >
-      <!-- Table Header -->
-      <template slot="header" v-if="headerSlot">
-        <slot name="header" :table-props="tableProps"> </slot>
-      </template>
-      <!-- Table Body -->
-      <template slot="body" v-if="bodySlot">
-        <slot name="body" :data="tableData.data"> </slot>
-      </template>
-      <template slot="body" v-else>
-        <tbody
-          v-if="columns"
-          :class="computedClasses['t-body']"
-          class="laravel-vue-datatable-tbody"
-        >
-          <tr
-            :key="item.id"
-            :class="computedClasses['t-body-tr']"
-            v-for="(item, rowIndex) in tableData.data"
-            @click="$emit('row-clicked', item)"
-            class="laravel-vue-datatable-tbody-tr"
-          >
-            <td
-              :key="column.name"
-              v-for="(column, columnIndex) in columns"
-              :class="bodyCellClasses(column)"
-              class="laravel-vue-datatable-td"
-            >
-              <laravel-vue-data-table-cell
-                :row="rowIndex"
-                :column="columnIndex"
-                :value="item"
-                :transform="column.transform"
-                :name="column.name"
-                :meta="column.meta"
-                :event="column.event"
-                :classes="column.classes"
-                :handler="column.handler"
-                :comp="column.component"
-              >
-              </laravel-vue-data-table-cell>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </laravel-vue-table>
-    <!-- Bottom Filters -->
-    <slot
-      :page="page"
-      name="pagination"
-      v-if="paginationSlot"
-      :meta="tableData.meta"
-      :links="tableData.links"
-    >
-    </slot>
-    <laravel-pagination
-      v-else
-      :data="tableData"
-      :size="pagination.size"
-      :limit="pagination.limit"
-      :align="pagination.align"
-      @pagination-change-page="paginationChangePage"
-    >
-      <span slot="prev-nav">{{ translate.previousButton }}</span>
-      <span slot="next-nav">{{ translate.nextButton }}</span>
-    </laravel-pagination>
-  </div>
+    <div>
+        <!-- Top Filters -->
+        <slot
+            :url="url"
+            name="filters"
+            :per-page="perPage"
+            :table-data="tableProps">
+            <laravel-vue-data-table-filters
+                :per-page="perPage"
+                :table-data="tableProps"
+                :placeholder-search="translate.placeholderSearch">
+            </laravel-vue-data-table-filters>
+        </slot>
+        
+        <!-- Table component -->
+        <laravel-vue-table
+            @sort="sortBy"
+            :sortKey="sortKey"
+            :columns="columns"
+            :dir="tableProps.dir"
+            :sortOrders="sortOrders"
+            :table-classes="computedClasses.table"
+            :table-head-classes="computedClasses['th']"
+            :table-header-classes="computedClasses['t-head']"
+            :table-row-classes="computedClasses['t-head-tr']"
+            :table-container-classes="computedClasses['table-container']">
+            <!-- Table Header -->
+            <template
+                slot="header"
+                v-if="headerSlot">
+                <slot
+                    name="header"
+                    :table-props="tableProps">
+                </slot>
+            </template>
+            <!-- Table Body -->
+            <template
+                slot="body"
+                v-if="bodySlot">
+                <slot
+                    name="body"
+                    :data="tableData.data">
+                </slot>
+            </template>
+            <template slot="body" v-else>
+                <tbody
+                    v-if="columns"
+                    :class="computedClasses['t-body']"
+                    class="laravel-vue-datatable-tbody">
+                    <tr
+                        :key="item.id"
+                        :class="computedClasses['t-body-tr']"
+                        v-for="(item, rowIndex) in tableData.data"
+                        @click="$emit('row-clicked', item)"
+                        class="laravel-vue-datatable-tbody-tr">
+                        <td 
+                            :key="column.name"
+                            :class="bodyCellClasses(column)"
+                            v-for="(column, columnIndex) in columns"
+                            class="laravel-vue-datatable-td">
+                            <laravel-vue-data-table-cell
+                                :row="rowIndex"
+                                :column="columnIndex"
+                                :value="item"
+                                :transform="column.transform"
+                                :name="column.name"
+                                :meta="column.meta"
+                                :event="column.event"
+                                :classes="column.classes"
+                                :handler="column.handler"
+                                :comp="column.component">
+                            </laravel-vue-data-table-cell>
+                        </td>
+                    </tr>
+                </tbody>
+            </template>
+        </laravel-vue-table>
+
+        <!-- Bottom Filters -->
+        <slot
+            :page="page"
+            name="pagination"
+            :meta="tableData.meta"
+            :links="tableData.links">
+            <laravel-pagination
+                :data="tableData"
+                :size="pagination.size"
+                :limit="pagination.limit"
+                :align="pagination.align"
+                @pagination-change-page="paginationChangePage">
+                    <span slot="prev-nav">{{ translate.previousButton }}</span>
+                    <span slot="next-nav">{{ translate.nextButton }}</span>
+            </laravel-pagination>
+        </slot>
+        
+    </div>
 </template>
 
 <script>
@@ -226,11 +226,31 @@ export default {
     addRecord(data) {
       this.tableData.data.push(data);
     },
-    sortBy(key, columnName = null) {
-      this.sortKey = key;
-      this.sortOrders[key] = this.sortOrders[key] * -1;
-      this.tableProps.column = columnName ? columnName : key;
-      this.tableProps.dir = this.sortOrders[key] === 1 ? "desc" : "asc";
+    computed: {
+        bodySlot() {
+            if (this.$scopedSlots) {
+                return this.$scopedSlots.body;
+            }
+            return null;
+        },
+        headerSlot() {
+            if (this.$scopedSlots) {
+                return this.$scopedSlots.header;
+            }
+            return null;
+        },
+        getRequestPayload() {
+            let payload = Object.assign({}, this.tableProps);
+            delete payload.filters;
+            payload = Object.assign(payload, this.tableProps.filters);
+            payload = Object.assign(payload, this.tableProps.filters);
+            payload.draw = this.draw;
+            payload.page = this.page;
+            return {
+                params: payload,
+                headers: this.headers,
+            };
+        },
     },
     getIndex(array, key, value) {
       return array.findIndex(i => i[key] == value);
