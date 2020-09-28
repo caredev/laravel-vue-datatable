@@ -1,6 +1,5 @@
 <script>
-
-import ColumnNotFoundException from "../exceptions/ColumnNotFoundException";
+import ColumnNotFoundException from "../exceptions/ColumnNotFoundException"
 
 export default {
     props: {
@@ -10,23 +9,19 @@ export default {
         column: {
             type: Number,
         },
-        transform: {
-
-        },
-        comp: {
-
-        },
+        transform: {},
+        comp: {},
         meta: {
             type: Object,
             default: () => ({}),
         },
         name: {
             type: String,
-            default: '',
+            default: "",
         },
         event: {
             type: String,
-            default: 'click',
+            default: "click",
         },
         handler: {
             type: Function,
@@ -42,55 +37,72 @@ export default {
         },
     },
     data() {
-        return {};
+        return {}
     },
     render(createElement) {
-        let transformedValue;
+        let transformedValue
 
-        if (typeof this.transform === 'function') {
-           transformedValue = this.transform({ row: this.row, column: this.column, name: this.name, data: this.value, meta: this.meta });
+        if (typeof this.transform === "function") {
+            transformedValue = this.transform({
+                row: this.row,
+                column: this.column,
+                name: this.name,
+                data: this.value,
+                meta: this.meta,
+            })
         }
-        
-        if (this.comp) {
 
+        if (this.comp) {
             let props = {
                 name: this.name,
                 data: this.value,
                 meta: this.meta,
                 transformed: transformedValue,
-            };
+            }
 
-            props[this.event] = this.handler;
+            props[this.event] = this.handler
 
             return createElement(this.comp, {
                 props,
                 attrs: {
-                    classes: this.classes
+                    classes: this.classes,
                 },
-            });
-        }
-        
-        if (typeof this.transform === 'function') {
-            return createElement('span', {domProps:{innerHTML: transformedValue}})
+            })
         }
 
-        let columnName;
-        let handle = this.name.split(".");
+        if (typeof this.transform === "function") {
+            return createElement("span", {
+                domProps: { innerHTML: transformedValue },
+                attrs: {
+                    classes: this.classes,
+                },
+            })
+        }
+
+        let columnName
+        let handle = this.name.split(".")
 
         if (handle.length > 1) {
-            columnName = this.value;
+            columnName = this.value
             for (let i = 0; i < handle.length; i++) {
-                columnName = columnName[handle[i]];
+                columnName = columnName[handle[i]]
             }
         } else {
-            columnName = this.value[this.name];
+            columnName = this.value[this.name]
         }
 
-        if (typeof columnName === 'undefined' && ! this.comp && columnName) {
-            throw new ColumnNotFoundException(`The column ${this.name} was not found`);
+        if (typeof columnName === "undefined" && !this.comp && columnName) {
+            throw new ColumnNotFoundException(
+                `The column ${this.name} was not found`
+            )
         }
-        
-        return createElement('span', {domProps:{innerHTML: columnName}});
-    }
+
+        return createElement("span", {
+            domProps: { innerHTML: columnName },
+            attrs: {
+                classes: this.classes,
+            },
+        })
+    },
 }
 </script>
